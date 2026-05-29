@@ -31,6 +31,18 @@ export default abstract class BasePage {
   protected async goTo(url: string): Promise<void> {
     await this.page.goto(url, { timeout: 90_000 });
     await this.waitForLoadingComplete();
+    await this.dismissTourIfPresent();
+  }
+
+  private async dismissTourIfPresent(): Promise<void> {
+    const skipButton = this.page.getByRole('button', { name: 'Skip tour' });
+    try {
+      if ((await skipButton.count()) > 0) {
+        await skipButton.click({ timeout: 3_000 });
+      }
+    } catch {
+      // Tour not present or already dismissed
+    }
   }
 
   protected locator(
