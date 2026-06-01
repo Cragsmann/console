@@ -388,6 +388,14 @@ export default class KubernetesClient {
     }
   }
 
+  async createSecret(namespace: string, body: k8s.V1Secret): Promise<unknown> {
+    return this.k8sApi.createNamespacedSecret({ namespace, body });
+  }
+
+  async getSecret(name: string, namespace: string): Promise<k8s.V1Secret> {
+    return this.k8sApi.readNamespacedSecret({ name, namespace });
+  }
+
   async deleteSecret(name: string, namespace: string): Promise<void> {
     try {
       await this.k8sApi.deleteNamespacedSecret({ name, namespace });
@@ -518,6 +526,10 @@ export default class KubernetesClient {
 
   async createDeployment(namespace: string, body: k8s.V1Deployment): Promise<unknown> {
     return this.appsApi.createNamespacedDeployment({ namespace, body });
+  }
+
+  async getDeployment(name: string, namespace: string): Promise<k8s.V1Deployment> {
+    return this.appsApi.readNamespacedDeployment({ name, namespace });
   }
 
   async deleteDeployment(name: string, namespace: string): Promise<void> {
